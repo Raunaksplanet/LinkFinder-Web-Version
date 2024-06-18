@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result</title>
+</head>
+<body>
+    <h2>Result</h2>
+    <p>URL: {{ url }}</p>
+    {% if error %}
+        <p>Error: {{ error }}</p>
+    {% else %}
+        <p>Status Code: {{ status_code }}</p>
+    {% endif %}
+    <p><a href="/">Back to Home</a></p>
+</body>
+</html>
