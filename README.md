@@ -4,6 +4,7 @@ LinkFinder Web offers the functionality of the CLI tool in a user-friendly web i
 # File structure 
     .
     ├── app.py
+    ├── requirements.txt
     ├── static
     │   └── style.css
     └── templates
