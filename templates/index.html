@@ -5,19 +5,24 @@
     <title>LinkFinder Search</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
+
     <h1>LinkFinder Web Version By Biscuit</h1>
+
     <div class="container">
         <div class="description">
             LinkFinder Web offers the functionality of the CLI tool in a user-friendly web interface. Extract links, endpoints, and JavaScript resources from web pages effortlessly, whether analyzing single pages or crawling entire sites. Simplify your web analysis with LinkFinder Web.
         </div>
 
-        <div class="input-bar">
-            <input type="text" class="input-field" placeholder="Enter links...">
-            <input type="file" class="file-input" accept=".txt">
+        <div class="Input-Link">
+            <form action="/InputLink" method="post">
+                <input type="text" name="URL" class="URL" placeholder="Enter Full URL" required>
+                <button type="submit" class="button">Analyze Link</button>
+            </form>
         </div>
 
-        <a class="button" href="https://github.com/Raunaksplanet/LinkFinder-Web-Version/issues/new"
+        <a class="button-github" href="https://github.com/Raunaksplanet/LinkFinder-Web-Version/issues/new"
             rel="nofollow noopener noreferrer" target="_blank">
             <span class="github-icon">
                 <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
@@ -29,5 +34,6 @@
             Report an issue
         </a>
     </div>
+
 </body>
 </html>
