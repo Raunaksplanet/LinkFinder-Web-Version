@@ -512,3 +512,5 @@ def InputLink():
             return render_template('output.html', data=output)
         #     return render_template('output.html', data=Markup(url))
         # return 'Invalid request'
+if __name__ == '__main__':
+    app.run(debug=True)
