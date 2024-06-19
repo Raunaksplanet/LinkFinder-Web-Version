@@ -10,6 +10,42 @@ h1 {
     text-align: center;
 }
 
+.footer {
+    text-align: center;
+    margin-top: auto;
+    padding: 20px;
+    background-color: #f8f8f8;
+}
+
+.footer a {
+    margin: 0 10px;
+    display: inline-block;
+}
+
+.footer .linkedin {
+    width: 30px;
+    height: 30px;
+    fill: #0077B5; /* Set a default fill color for the icons */
+}
+
+.footer .twitter {
+    width: 30px;
+    height: 30px;
+    fill: #1DA1F2; /* Set a default fill color for the icons */
+}
+
+.footer .github {
+    width: 30px;
+    height: 30px;
+    fill: #181717; /* Set a default fill color for the icons */
+}
+
+.footer .medium {
+    width: 30px;
+    height: 30px;
+    fill: #181717; /* Set a default fill color for the icons */
+}
+
 .container {
     display: flex;
     flex-direction: column;
