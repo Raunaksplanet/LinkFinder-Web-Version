@@ -1,0 +1,7 @@
+jsbeautifier
+requests
+urllib3
+Flask
+requests_file
+lxml
+markupsafe
