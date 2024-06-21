@@ -1,8 +1,0 @@
-Flask=3.0.3
-jsbeautifier
-requests
-urllib3
-flask
-requests_file
-lxml
-markupsafe
