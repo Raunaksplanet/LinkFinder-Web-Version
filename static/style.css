@@ -68,9 +68,14 @@ h1 {
 
 .Input-Link {
     display: flex;
-    max-width: 800px;
-    margin-bottom: 50px;
+    max-width: fit-content;
+    margin-bottom: 10px;
 }
+
+.form {
+    display: flex;
+}
+
 
 .URL {
     flex: 1;
@@ -78,16 +83,17 @@ h1 {
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
     font-size: 16px;
+    margin: 0;
 }
 
 .file-input {
-    padding: 8px 12px;
+    padding: 7.5px;
     background-color: #4CAF50;
     color: white;
-    border: none;
     border-radius: 0 4px 4px 0;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 10.5px;
+    margin: 0;
 }
 
 .button {
@@ -95,9 +101,11 @@ h1 {
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 0 4px 4px 0;
+    /* border-radius: 0 4px 4px 0; */
     cursor: pointer;
     font-size: 16px;
+    margin: 0 2px;
+
 }
 
 .button-github {
