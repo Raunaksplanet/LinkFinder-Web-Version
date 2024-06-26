@@ -19,11 +19,10 @@ import urllib3
 import xml.etree.ElementTree
 
 # disable warning
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # for read local file with file:// protocol
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from requests_file import FileAdapter
 from lxml import html
 from markupsafe import Markup
@@ -425,6 +424,11 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
+@app.route('/InputFile', methods=['POST'])
+def InputFile():
+    file = request.files['file']
+    return render_template('output.html', content=file_content)
 
 @app.route('/InputLink', methods=['POST'])
 def InputLink():
