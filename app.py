@@ -388,7 +388,7 @@ def InputLink():
                             if context not in no_dup:
                                 body += '</a><div class="container">%s</div></div>' % (context)
                                 body = body.replace(
-                                    context, '<span style="background-color:yellow">%s</span>' % context)
+                                    context, '<span style="background-color:red">%s</span>' % context)
                                 no_dup.append(context)
                     else:
                         body += '</a><div class="container">%s</div></div>' % (match.get('context')[0] if len(match.get('context')) > 1 else match.get('context'))
