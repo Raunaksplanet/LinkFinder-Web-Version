@@ -73,102 +73,6 @@ _regex = {
                     r"passwd\s*[`=:\"]+\s*[^\s]+)",
 }
 
-_template = '''
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Helvetica, sans-serif;
-            background-color: #f5f5f5;
-            color: #323232;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        h1 {
-            font-family: 'Arial', sans-serif;
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        a {
-            color: #000;
-            text-decoration: none;
-        }
-
-        .text {
-            font-size: 16px;
-            color: #323232;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .container {
-            background-color: #e9e9e9;
-            padding: 15px;
-            margin: 20px 0;
-            border: 1px solid #8a8a8a;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .button {
-            padding: 15px 50px;
-            margin: 10px 0;
-            display: inline-block;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .button:hover {
-            background-color: #45a049;
-        }
-
-        .github-icon {
-            position: relative;
-            top: 5px;
-            margin-right: 10px;
-        }
-    </style>
-    <title>LinkFinder Output</title>
-</head>
-
-<body contenteditable="true">
-    <h1>LinkFinder Output</h1>
-    <div class="text">
-        $$content$$
-    </div>
-    <a class="button" contenteditable="false" href="https://github.com/m4ll0k/SecretFinder/issues/new"
-        rel="nofollow noopener noreferrer" target="_blank">
-        <span class="github-icon">
-            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-                <path
-                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
-                    fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
-            </svg>
-        </span>
-        Report an issue
-    </a>
-</body>
-
-</html>
-'''
-
 # All the required functions starting from here
 def parser_error(msg):
     print('Usage: python %s [OPTIONS] use -h for help'%sys.argv[0])
@@ -391,19 +295,7 @@ def send_request(url):
             name, value = i.replace(' ', '').split(':')
             headers[name] = value
     
-    # add cookies
-    # if cookies:
-    #     headers['Cookie'] = cookies
-
     headers.update(default_headers)
-    
-    # proxy
-    # proxies = {}
-    # if proxy:
-    #     proxies.update({
-    #         'http': proxy,
-    #         'https': proxy,
-    #     })
     
     try:
         resp = requests.get(
@@ -435,12 +327,10 @@ def InputLink():
         output_file = "output.html"
         regex_pattern = None
         use_burp = False
-        # cookies = "NewCookie"
         ignore_str = ""
         only_str = ""
         headers = ""
-        # proxy = ""
-        
+       
         if url[-1:] == "/":
             # /aa/ -> /aa
             url = url[:-1]
@@ -504,14 +394,11 @@ def InputLink():
                         body += '</a><div class="container">%s</div></div>' % (match.get('context')[0] if len(match.get('context')) > 1 else match.get('context'))
                         body = body.replace(
                             match.get('context')[0] if len(match.get('context')) > 0 else ''.join(match.get('context')),
-                            '<span style="background-color:yellow">%s</span>' % (match.get('context') if len(match.get('context')) > 1 else match.get('context'))
+                            '<span style="background-color:red">%s</span>' % (match.get('context') if len(match.get('context')) > 1 else match.get('context'))
                         )
                     output += header + body
         if output_file != 'cli':
-            # html_save(output,output_file)
             return render_template('output.html', data=output)
-        #     return render_template('output.html', data=Markup(url))
-        # return 'Invalid request'
 
 if __name__ == '__main__':
     app.run(debug=True)
