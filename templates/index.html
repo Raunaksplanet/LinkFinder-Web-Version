@@ -2,8 +2,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>LinkFinder Search</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <title>LinkFinder Search</title>
 </head>
 
 <body>
@@ -15,11 +16,20 @@
             LinkFinder Web offers the functionality of the CLI tool in a user-friendly web interface. Extract links, endpoints, and JavaScript resources from web pages effortlessly, whether analyzing single pages or crawling entire sites. Simplify your web analysis with LinkFinder Web.
         </div>
 
-        <div class="Input-Link">
-            <form action="/InputLink" method="post">
-                <input type="text" name="URL" class="URL" placeholder="Enter Full Valid URL" required>
-                <button type="submit" class="button">Analyze Link</button>
-            </form>
+        <div class="rohit">
+            <div class="Input-Link">
+                <form action="/InputLink" class="form" method="post" enctype="multipart/form-data">
+                    <input type="text" name="URL" class="URL" placeholder="Enter Full Valid URL" required>
+                    <button type="submit" class="button">Analyze Link</button>
+                </form>
+            </div>
+   
+            <div class="Input-Link">
+                <form action="/InputFile" class="form" method="post" enctype="multipart/form-data">
+                    <input type="file" name="js-file" class="file-input" accept=".txt" required>
+                    <button type="submit" class="button">Analyze File</button>
+                </form>
+            </div>
         </div>
 
         <a class="button-github" href="https://github.com/Raunaksplanet/LinkFinder-Web-Version/issues/new"
