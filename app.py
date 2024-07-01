@@ -70,7 +70,7 @@ _regex = {
                     r"password\s*[`=:\"]+\s*[^\s]+|" \
                     r"password is\s*[`=:\"]*\s*[^\s]+|" \
                     r"pwd\s*[`=:\"]*\s*[^\s]+|" \
-                    r"passwd\s*[`=:\"]+\s*[^\s]+)",
+                    r"passwd\s*[`=:\"]+\s*[^\s]+)"
 }
 
 # All the required functions starting from here
@@ -317,6 +317,7 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/InputLink', methods=['POST'])
 def InputLink():
