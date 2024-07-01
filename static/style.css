@@ -1,21 +1,20 @@
 body {
     font-family: Helvetica, sans-serif;
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text color */
+    background-color: #323232;
+    /* color: #323232; */
     padding: 20px;
     line-height: 1.6;
 }
 
 h1 {
     text-align: center;
-    color: #ffffff; /* White color for headings */
+    color: #ffffff; 
 }
 
 .footer {
     text-align: center;
     margin-top: auto;
     padding: 20px;
-    /* background-color: #1f1f1f; Slightly lighter dark background for footer */
 }
 
 .footer a {
@@ -41,22 +40,28 @@ h1 {
     margin: 0 auto;
     border: 1px solid #8a8a8a;
     border-radius: 1em;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     width: 56vw;
+
 }
 
 .description {
     max-width: 800px;
     text-align: center;
     margin-bottom: 20px;
-    color: #cfcfcf; /* Lighter text color */
+    color: #cfcfcf;
 }
 
 .Input-Link {
     display: flex;
-    max-width: 800px;
-    margin-bottom: 50px;
+    max-width: fit-content;
+    margin-bottom: 10px;
 }
+
+.form {
+    display: flex;
+}
+
 
 .URL {
     flex: 1;
@@ -68,15 +73,26 @@ h1 {
     color: #e0e0e0; /* Light text color */
 }
 
-.file-input,
+.file-input {
+    padding: 7.5px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px 0 0 4px;
+    cursor: pointer;
+    font-size: 10.5px;
+    margin: 0;
+}
+
 .button {
     padding: 8px 12px;
     background-color: #4CAF50;
     color: white;
     border: none;
-    border-radius: 0 4px 4px 0;
+    /* border-radius: 0 4px 4px 0; */
     cursor: pointer;
     font-size: 16px;
+    margin: 0 2px;
+
 }
 
 .button-github {
@@ -94,11 +110,3 @@ h1 {
 .button:hover {
     background-color: #0056b3;
 }
-
-.footer .linkedin:hover,
-.footer .twitter:hover,
-.footer .github:hover,
-.footer .medium:hover {
-    fill: #00aaff; /* Highlight color on hover */
-}
-
