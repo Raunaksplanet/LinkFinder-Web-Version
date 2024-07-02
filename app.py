@@ -63,12 +63,6 @@ _regex = {
                     r"passwd\s*[`=:\"]+\s*[^\s]+)"
 }
 
-# All the required functions starting from here
-def parser_error(msg):
-    print('Usage: python %s [OPTIONS] use -h for help'%sys.argv[0])
-    print('Error: %s'%msg)
-    sys.exit(0)
-
 def getContext(matches,content,name,rex='.+?'):
     ''' get context '''
     items = []
@@ -175,41 +169,12 @@ def parser_input(input):
         paths = glob.glob(os.path.abspath(input))
         for index, path in enumerate(paths):
             paths[index] = "file://%s" % path
-        return (paths if len(paths)> 0 else parser_error('Input with wildcard does not match any files.'))
+        return paths if len(paths) > 0 else 'Input with wildcard does not match any files.'
+
 
     # method 5 - local file
     path = "file://%s"% os.path.abspath(input)
-    return [path if os.path.exists(input) else parser_error('file could not be found (maybe you forgot to add http/https).')]
-
-
-def html_save(output, output_file):
-    ''' Save HTML output to a file and open it in a browser '''
-    hide = os.dup(1)
-    os.close(1)
-    os.open(os.devnull, os.O_RDWR)
-    
-    try:
-        with open(output_file, "w", encoding="utf-8") as text_file:
-            text_file.write(_template.replace('$$content$$', output))
-        
-        print(f'URL to access output: file://{os.path.abspath(output_file)}')
-        file_url = f'file:///{os.path.abspath(output_file)}'
-
-        if sys.platform.startswith('linux'):
-            subprocess.call(['xdg-open', file_url])
-        else:
-            webbrowser.open(file_url)
-    
-    except Exception as err:
-        print(f'Output can\'t be saved in {output_file} due to exception: {err}')
-    
-    finally:
-        os.dup2(hide, 1)
-
-def cli_output(matched):
-    ''' cli output '''
-    for match in matched:
-        print(match.get('name')+'\t->\t'+match.get('matched').encode('ascii','ignore').decode('utf-8'))
+    return  os.path.exists(input) 
 
 def urlParser(url):
     ''' urlParser '''
@@ -221,6 +186,7 @@ def extractjsurl(content, base_url, ignore_str="", only_str=""):
     ''' JS url extract from html page '''
     soup = html.fromstring(content)
     all_src = []
+
     urlParser(base_url)
     
     for src_elem in soup.xpath('//script'):
@@ -319,95 +285,81 @@ def display_lines():
     lines = request.args.getlist('lines')
     page = int(request.args.get('page', 1))
     lines_per_page = 1
+    
     total_pages = math.ceil(len(lines) / lines_per_page)
     start = (page - 1) * lines_per_page
     end = start + lines_per_page
-    return render_template('output2.html', lines=lines[start:end], page=page, total_pages=total_pages, lines_param=lines)
 
+    output = ""
+    mode = 1
+    urls = lines  # Assuming lines is a list of URLs
+    
+    if not urls:
+        # Handle case where no URLs are provided
+        return "No URLs provided."
+
+    for url in urls:
+        file_content = send_request(url)  # Assuming send_request function exists
+        matched_results = parser_file(file_content, mode)  # Assuming parser_file function exists
+        
+        output += f'<h1>File: <a href="{escape(url)}" target="_blank" rel="nofollow noopener noreferrer">{escape(url)}</a></h1>'
+        
+        for match in matched_results:
+            _named = match.get('name').replace('_', ' ')
+            header = f'<div class="text">{_named}'
+            body = ''
+            
+            contexts = match.get('context', [])
+            unique_contexts = list(dict.fromkeys(contexts)) if match.get('multi_context') else contexts[:1]
+            
+            for context in unique_contexts:
+                highlighted_context = f'<span style="background-color:red">{context}</span>'
+                body += f'<div class="container">{highlighted_context}</div>'
+            
+            output += header + body
+
+     
+    return render_template('output2.html', lines=lines[start:end], page=page, total_pages=total_pages, lines_param=lines)
+   
+# ------------------------------------------------------------------------------------------------------
 
 
 @app.route('/InputLink', methods=['POST'])
 def InputLink():
         url = request.form['URL']
-        # print(url)
-            # Configuration variables
-        url_link = url
-        output_file = "output.html"
-        regex_pattern = None
-        total_pages = 1
-        use_burp = False
-        ignore_str = ""
-        only_str = ""
-        headers = ""
-       
-        if url[-1:] == "/":
-            # /aa/ -> /aa
-            url = url[:-1]
-
         mode = 1
-        if output_file == "cli":
-            mode = 0
-        
-        # add regex
-        if regex_pattern:
-            # validate regular exp
-            try:
-                r = re.search(regex_pattern, ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(random.randint(10, 50))))
-            except Exception as e:
-                print('Your python regex isn\'t valid')
-                sys.exit()
+        total_pages = 1
+        output_file = "output.html"
+        headers = ""
+        output = ""
+        urls=""
 
-            _regex = {
-                'custom_regex' : regex_pattern
-            }
-
-        # Assuming extract is always True in this context as --extract was an action store_true
-        content = send_request(url)
-        urls = extractjsurl(content, url)
-
-        # convert input to URLs or JS files (assuming extract is not always True in some cases)
         if not urls:
+            content = send_request(url)
+            urls = extractjsurl(content, url)
             urls = parser_input(url)
 
         # convert URLs to js file
-        output = ''
         for url in urls:
-            print('[ + ] URL: ' + url)
-            if not use_burp:
-                file = send_request(url)
-            else:
-                file = url.get('js')
-                url = url.get('url')
-
+            file = send_request(url)
             matched = parser_file(file, mode)
-            if output_file == 'cli':
-                cli_output(matched)
-            else:
-                output += '<h1>File: <a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a></h1>' % (escape(url), escape(url))
-                for match in matched:
-                    _matched = match.get('matched')
-                    _named = match.get('name')
-                    header = '<div class="text">%s' % (_named.replace('_', ' '))
-                    body = ''
-                    # find same thing in multiple context
-                    if match.get('multi_context'):
-                        # remove duplicate
-                        no_dup = []
-                        for context in match.get('context'):
-                            if context not in no_dup:
-                                body += '</a><div class="container">%s</div></div>' % (context)
-                                body = body.replace(
-                                    context, '<span style="background-color:red">%s</span>' % context)
-                                no_dup.append(context)
-                    else:
-                        body += '</a><div class="container">%s</div></div>' % (match.get('context')[0] if len(match.get('context')) > 1 else match.get('context'))
-                        body = body.replace(
-                            match.get('context')[0] if len(match.get('context')) > 0 else ''.join(match.get('context')),
-                            '<span style="background-color:red">%s</span>' % (match.get('context') if len(match.get('context')) > 1 else match.get('context'))
-                        )
-                    output += header + body
-        if output_file != 'cli':
-            return render_template('output.html', data=output, total_pages=total_pages)
+            output += '<h1>File: <a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a></h1>' % (escape(url), escape(url))
+            for match in matched:
+                _named = match.get('name').replace('_', ' ')
+                header = f'<div class="text">{_named}'
+                body = ''
+
+                contexts = match.get('context', [])
+                unique_contexts = list(dict.fromkeys(contexts)) if match.get('multi_context') else contexts[:1]
+                
+                for context in unique_contexts:
+                    highlighted_context = f'<span style="background-color:red">{context}</span>'
+                    body += f'</a><div class="container">{highlighted_context}</div></div>'
+                
+                output += header + body
+
+        
+        return render_template('output.html', data=output, total_pages=total_pages)
 
 if __name__ == '__main__':
     app.run(debug=True)
