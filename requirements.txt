@@ -1,8 +1,8 @@
+Flask==3.0.3
 jsbeautifier
 requests
 urllib3
-Flask
+flask
 requests_file
 lxml
 markupsafe
-gunicorn
