@@ -4,18 +4,8 @@ if not sys.version_info.major >= 3:
     sys.exit(0)
 os.environ["BROWSER"] = "open"
 
-import re
-import glob
-import argparse
-import jsbeautifier
-import webbrowser
-import subprocess
-import base64
-import requests
-import string
-import random
+import re, math, glob, argparse, jsbeautifier, webbrowser, subprocess, base64, requests, string, random, urllib3
 from html import escape
-import urllib3
 import xml.etree.ElementTree
 
 # disable warning
@@ -23,7 +13,7 @@ import xml.etree.ElementTree
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # for read local file with file:// protocol
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from requests_file import FileAdapter
 from lxml import html
 from markupsafe import Markup
@@ -318,6 +308,23 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
+@app.route('/upload', methods=['POST'])
+def upload_file():    
+    file = request.files['js-file']
+    file_lines = file.read().decode('utf-8').splitlines()
+    return redirect(url_for('display_lines', lines=file_lines, page=1))
+
+@app.route('/display_lines')
+def display_lines():
+    lines = request.args.getlist('lines')
+    page = int(request.args.get('page', 1))
+    lines_per_page = 1
+    total_pages = math.ceil(len(lines) / lines_per_page)
+    start = (page - 1) * lines_per_page
+    end = start + lines_per_page
+    return render_template('output2.html', lines=lines[start:end], page=page, total_pages=total_pages, lines_param=lines)
+
+
 
 @app.route('/InputLink', methods=['POST'])
 def InputLink():
@@ -327,6 +334,7 @@ def InputLink():
         url_link = url
         output_file = "output.html"
         regex_pattern = None
+        total_pages = 1
         use_burp = False
         ignore_str = ""
         only_str = ""
@@ -399,7 +407,7 @@ def InputLink():
                         )
                     output += header + body
         if output_file != 'cli':
-            return render_template('output.html', data=output)
+            return render_template('output.html', data=output, total_pages=total_pages)
 
 if __name__ == '__main__':
     app.run(debug=True)
