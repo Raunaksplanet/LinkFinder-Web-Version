@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>LinkFinder Output</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='output-style.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+</head>
+
+<body >
+    <h1>LinkFinder Output</h1> 
+    <div class="text" contenteditable="true">
+        <h3 class="highlight">
+            {% for line in lines %}
+                <p>{{ line | safe }}</p>
+            {% endfor %}
+        </h3>
+    </div>
+
+    <div class="pagiantion">
+        {% for i in range(1, total_pages + 1) %}
+            {% if i == page %}
+                <strong>{{ i }}</strong>
+            {% else %}
+                <a href="{{ url_for('display_lines', lines=lines_param, page=i) }}">{{ i }}</a>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div class="pagiantion2">
+        <a href="{{ url_for('index') }}">Upload Another File</a>
+    </div>
+
+
+    <a class="button" contenteditable="false" href="https://github.com/m4ll0k/SecretFinder/issues/new"
+        rel="nofollow noopener noreferrer" target="_blank">
+        <span class="github-icon">
+            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
+                    fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+            </svg>
+        </span>
+        Report an issue
+    </a>
+</body>
+
+</html>
