@@ -18,11 +18,10 @@ h1 {
 
 .text {
     font-size: 16px;
-    color: #ffffff; /* Light text color */
-    background-color: #1e1e1e; /* Dark background */
+    color: #ffffff; 
+    background-color: #1e1e1e; 
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Darker shadow */
     margin-bottom: 20px;
 }
 
@@ -35,13 +34,13 @@ a {
     font-size: 16px;
     margin: 0 4px;
 }
-.pagiantion{
+.pagination{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.pagiantion2{
+.pagination2{
     text-align: center; 
     margin: 1em 0;
     padding: 0px 16px;
