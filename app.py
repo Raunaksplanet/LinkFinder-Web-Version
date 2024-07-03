@@ -1686,24 +1686,24 @@ def display_lines():
     lines = request.args.getlist('lines')
     page = int(request.args.get('page', 1))
     lines_per_page = 1
-    
+
     total_pages = math.ceil(len(lines) / lines_per_page)
     start = (page - 1) * lines_per_page
     end = start + lines_per_page
 
     output = ""
     mode = 1
-    urls = lines  # Assuming lines is a list of URLs
-    
+    urls = lines[start:end]  # Paginate the URLs
+
     if not urls:
         # Handle case where no URLs are provided
         return "No URLs provided."
 
     for url in urls:
-        file_content = send_request(url)  # Assuming send_request function exists
-        matched_results = parser_file(file_content, mode)  # Assuming parser_file function exists
+        file_content = send_request(url)  
+        matched_results = parser_file(file_content, mode) 
         
-        output += f'<h1>File: <a href="{escape(url)}" target="_blank" rel="nofollow noopener noreferrer">{escape(url)}</a></h1>'
+        output += '<h1>File: <a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a></h1>' % (escape(url), escape(url))
         
         for match in matched_results:
             _named = match.get('name').replace('_', ' ')
@@ -1719,8 +1719,8 @@ def display_lines():
             
             output += header + body
 
-     
-    return render_template('output2.html', lines=lines[start:end], page=page, total_pages=total_pages, lines_param=lines)
+    return render_template('output2.html', lines=lines[start:end], page=page, total_pages=total_pages, lines_param=lines, data=output)
+
    
 # ------------------------------------------------------------------------------------------------------
 
@@ -1744,7 +1744,9 @@ def InputLink():
         for url in urls:
             file = send_request(url)
             matched = parser_file(file, mode)
+
             output += '<h1>File: <a href="%s" target="_blank" rel="nofollow noopener noreferrer">%s</a></h1>' % (escape(url), escape(url))
+
             for match in matched:
                 _named = match.get('name').replace('_', ' ')
                 header = f'<div class="text">{_named}'
