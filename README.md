@@ -43,6 +43,9 @@ python3 app.py
 Enjoy :)
 ```
 
+## Live Web-App 
+    https://link-finder-web-version.vercel.app
+
 ## LinkFinder V1
 - Single Link can be analysed at a time
 - Light theme
